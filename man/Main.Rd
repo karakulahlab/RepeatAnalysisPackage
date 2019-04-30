@@ -4,6 +4,7 @@
 \usage{
 filterSubset()
 getRegion()
+getOverlap()
 }
 \description{
 Prints 'Main Operations'.
@@ -11,4 +12,5 @@ Prints 'Main Operations'.
 \examples{
 filterSubset()
 getRegion()
+getOverlap()
 }

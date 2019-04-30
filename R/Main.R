@@ -13,14 +13,14 @@ source("R/biomartr.R")
 
 
 #to filter input genes from known gene file
-filterSubset<-function(input,genome, type, specie){
+filterSubset<-function(input, genome, type, species){
   filtered_df_kn <- data.frame()
-  if(!is.null(genome) & specie=="Human_hg19"){
+  if(!is.null(genome) & species=="Human_hg19"){
     if(type=="geneNames"){
       df<-scan(input,character())
       filtered_df_kn <- filterAsGene(genome,df)
       }else if(type=="geneOntologyID"){
-      filtered_df_kn <- filterGOID(specie,input)
+      filtered_df_kn <- filterGOID(species,input)
       }else if(type=="geneModules"){
         df<-read.csv(input,header=TRUE)
         filtered_df_kn <- filterAsGene(genome,df$genes)}
@@ -44,11 +44,27 @@ getRegion<-function(input,length,region,isGenebody){
     print("please control the region")
     return(NULL)
   }
-
 }
 
 
-
+#to return intersect between genes which are given as input and repeat annotations
+getOverlap<-function(genes,repeats,type,species){
+  gr_genes<-makeGRangeObj(genes)
+  gr_repeats<-makeGRangeObj(repeats)
+  if(type=="geneNames"){
+    overlaps<-returnOverlapUpGene(gr_repeats,gr_genes)
+    suppressMessages(library(ggplot2))
+    suppressMessages(library(interactiveDisplay))
+    suppressMessages(library(Biobase))
+    return(overlaps)
+  }else if(type=="geneModules"){
+    overlaps<-returnOverlapUpCluster(gr_repeats,gr_genes)
+    suppressMessages(library(ggplot2))
+    suppressMessages(library(interactiveDisplay))
+    suppressMessages(library(Biobase))
+    return(overlaps)
+  }
+}
 
 
 
