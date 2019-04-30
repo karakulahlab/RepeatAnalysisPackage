@@ -1,13 +1,8 @@
-
 library(DT)
-library(ggplot2)
 library(dplyr)
 library(devtools)
-library(bedr)
-library(GenomicRanges)
-library(highcharter)
-library(R.utils)
-library(methylKit)
+
+
 
 source("R/FileOperations.R")
 source("R/GenomicRanges.R")
@@ -18,18 +13,17 @@ source("R/biomartr.R")
 
 
 #to filter input genes from known gene file
-filterSubset<-function(input, type, specie){
-  df_known <- readKnownGenes(specie)
+filterSubset<-function(input,genome, type, specie){
   filtered_df_kn <- data.frame()
-  if(!is.null(df_known) & specie=="Human_hg19"){
+  if(!is.null(genome) & specie=="Human_hg19"){
     if(type=="geneNames"){
       df<-scan(input,character())
-      filtered_df_kn <- filterAsGene(df_known,df)
+      filtered_df_kn <- filterAsGene(genome,df)
       }else if(type=="geneOntologyID"){
       filtered_df_kn <- filterGOID(specie,input)
       }else if(type=="geneModules"){
         df<-read.csv(input,header=TRUE)
-        filtered_df_kn <- filterAsGene(df_known,df$genes)}
+        filtered_df_kn <- filterAsGene(genome,df$genes)}
     head(filtered_df_kn)
     return(filtered_df_kn)
   }else{return(NULL)}}
@@ -52,4 +46,15 @@ getRegion<-function(input,length,region,isGenebody){
   }
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
