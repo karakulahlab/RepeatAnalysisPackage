@@ -13,20 +13,43 @@ source("R/biomartr.R")
 
 
 #to filter input genes from known gene file
-filterSubset<-function(input, genome, type, species){
+filterSubset<-function(input, assembly, type){
   filtered_df_kn <- data.frame()
-  if(!is.null(genome) & species=="Human_hg19"){
+  if(!is.null(assembly)){
     if(type=="geneNames"){
       df<-scan(input,character())
-      filtered_df_kn <- filterAsGene(genome,df)
-      }else if(type=="geneOntologyID"){
-      filtered_df_kn <- filterGOID(species,input)
-      }else if(type=="geneModules"){
-        df<-read.csv(input,header=TRUE)
-        filtered_df_kn <- filterAsGene(genome,df$genes)}
+      filtered_df_kn <- filterGenes(assembly,df)
+    }else if(type=="geneOntologyID"){
+      filtered_df_kn <- filterGOID(assembly,input)
+    }else if(type=="geneModules"){
+      df<-read.csv(input,header=FALSE)
+      filtered_df_kn <- filterGenes(assembly,df$V1)}
     head(filtered_df_kn)
     return(filtered_df_kn)
   }else{return(NULL)}}
+
+
+data<-function(assembly){
+  information<-readRepeatMasker(assembly)
+  return(information)
+}
+
+#
+# #to filter input genes from known gene file
+# filterSubset<-function(input, genome, type, species){
+#   filtered_df_kn <- data.frame()
+#   if(!is.null(genome) & species=="Human_hg19"){
+#     if(type=="geneNames"){
+#       df<-scan(input,character())
+#       filtered_df_kn <- filterAsGene(genome,df)
+#       }else if(type=="geneOntologyID"){
+#       filtered_df_kn <- filterGOID(species,input)
+#       }else if(type=="geneModules"){
+#         df<-read.csv(input,header=TRUE)
+#         filtered_df_kn <- filterAsGene(genome,df$genes)}
+#     head(filtered_df_kn)
+#     return(filtered_df_kn)
+#   }else{return(NULL)}}
 
 
 #to get interval region as regions of input genes
